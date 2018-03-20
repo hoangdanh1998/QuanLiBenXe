@@ -4,12 +4,22 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
         Manager manager = new Manager();
+        Menu menu = new Menu();
+            menu.add("1 - Add a car.");
+            menu.add("2 - Remove a car.");
+            menu.add("3 - Modify a car.");
+            menu.add("4 - Search car.");
+            menu.add("5 - Sort list car and display it.");
+            menu.add("6 - Display list car.");
+            menu.add("7 - Read file store data.");
+            menu.add("8 - Save data to file.");
+            menu.add("9 - EXIT!");
         int choice;
         do {
-            Menu.MyMenu();
+            menu.print();
             do {
                 choice = InputValid.inputInteger("Enter your choice: ");
-            } while (choice < 0 || choice > 9);
+            } while (choice < 0 || choice > menu.size());
             switch (choice) {
                 case 1:
                     manager.ChoiceAdd();

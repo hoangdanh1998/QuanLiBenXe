@@ -80,7 +80,7 @@ public class Car implements Comparable {
         dateOut = theCar.getDateOut();
         
     }
-
+    
     @Override
     public int compareTo(Object SecondCar) {
         return ((Car) this).code.compareTo(((Car) SecondCar).code);

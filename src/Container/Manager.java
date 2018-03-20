@@ -3,25 +3,29 @@ package Container;
 import Model.Car;
 import java.io.*;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 public class Manager {
 
     static CarList data = new CarList(1000);
 
     public void display() {
+        if (!data.isEmpty())
         data.display();
+        else System.out.println("Empty list");
     }
 
     static String inputCode(String notify) {
-        String code;
-        boolean isError;
+        String code; 
+        
+        boolean isError; 
         do {
             isError = false;
             code = InputValid.inputString(notify);
-
-            if (code.equals("")) {
+            
+            if (code.equals("") || !code.matches("^\\d{2}[a-zA-Z]\\d-\\d{4,5}$")) {
                 isError = true;
-                Menu.Notification.showError("You must fill CODE: ");
+                Menu.Notification.showError("You must fill CODE_Correct format (67N1-6933)(67F1-40499)");
             } else if (data.isExistCarCode(code)) {
                 Menu.Notification.showError("This code EXISTED.");
                 isError = true;
@@ -31,11 +35,11 @@ public class Manager {
     }
 
     static Date inputDateOut(Date dateIn) {
-        Date dateOut;
+        Date dateOut; Date date;
         do {
             dateOut = InputValid.inputDateNotRequire("\tEnter Date OUT [dd/mm/yyyy]: ");
             if (dateOut == null) {
-                return null;
+                return  null;
             } else if (dateOut.before(dateIn)) {
                 Menu.Notification.showError("Day in must be after day out.");
             }
@@ -44,22 +48,26 @@ public class Manager {
     }
 
     public void ChoiceReadFile(String fileName) {
-
         try {
-            FileReader fr = new FileReader(fileName);
-            BufferedReader br = new BufferedReader(fr);
-            String code;
-            while ((code = br.readLine()) != null) {
-                String name = br.readLine();
-                String owner = br.readLine();
-                String manufacture = br.readLine();
-                Date DateIn = InputValid.StringToDate(br.readLine());
-                Date DateOut = InputValid.StringToDate(br.readLine());
+         
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            String detail;
+            while ((detail = br.readLine()) != null) {
+                String arr[] = detail.split("[,]");
+                String code = arr[0].trim();
+                String name = arr[1].trim();
+                String owner = arr[2].trim();
+                String manufacture = arr[3].trim();
+                Date DateIn = InputValid.StringToDate(arr[4].trim());
+                Date DateOut = InputValid.StringToDate(arr[5].trim());
+                
                 if (!data.isExistCarCode(code)) {
-                    data.add(new Car(code, name, owner, manufacture, DateIn, DateOut));
+                data.add(new Car(code, name, owner, manufacture, DateIn, DateOut));
                 }
-            }
+            } br.close();
+            
         } catch (Exception ex) {
+            System.out.println("Loi roi ne" + ex);
         }
         Menu.Notification.Success("Read file");
     }
@@ -68,17 +76,7 @@ public class Manager {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(fileName), "utf-8"))) {
             for (Car thisCar : data) {
-                writer.write(thisCar.getCode());
-                writer.newLine();
-                writer.write(thisCar.getName());
-                writer.newLine();
-                writer.write(thisCar.getOwner());
-                writer.newLine();
-                writer.write(thisCar.getManufacture());
-                writer.newLine();
-                writer.write(thisCar.dateToString(thisCar.getDateIn()));
-                writer.newLine();
-                writer.write(thisCar.dateToString(thisCar.getDateOut()));
+                writer.write(thisCar.getCode()+","+thisCar.getName()+","+thisCar.getOwner()+","+thisCar.getManufacture()+","+thisCar.dateToString(thisCar.getDateIn())+","+thisCar.dateToString(thisCar.getDateOut()) + " ");
                 writer.newLine();
             }
             writer.close();
@@ -89,7 +87,9 @@ public class Manager {
     public void ChoiceAdd() {
         Menu.Notification.Header("ADD CAR");
         System.out.println("This is REQUIRED FIELDS: ");
+        
         String code = inputCode("\tEnter car's CODE: ");
+        
         Date dateIn = InputValid.inputDate("\tEnter Date In [dd/mm/yyyy]: ");
         System.out.println("This is NOT required fields, enter if you unknown: ");
         Date dateOut = inputDateOut(dateIn);

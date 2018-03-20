@@ -1,20 +1,16 @@
 package Container;
 
-public class Menu {
+import java.util.Vector;
 
-    public static void MyMenu() {
+public class Menu extends Vector<String>{
+    
+    public void print(){
         System.out.println();
         System.out.println("\u001B[35m#########################| LIST CARS MANANGER |########################\u001B[1m");
         System.out.println("Functions to manage list cars:");
-        System.out.println("1 - Add a car.");
-        System.out.println("2 - Remove a car.");
-        System.out.println("3 - Modify a car.");
-        System.out.println("4 - Search car.");
-        System.out.println("5 - Sort list car and display it.");
-        System.out.println("6 - Display list car.");
-        System.out.println("7 - Read file store data.");
-        System.out.println("8 - Save data to file.");
-        System.out.println("9 - EXIT!");
+        for (String myString : this){
+            System.out.println(myString);
+        }
     }
 
     static class Notification {
