@@ -25,10 +25,10 @@ public class InputValid {
         return myNumber;
     }
     
-    public static boolean Confirm(){
+    public static boolean Confirm(String notify){
         String myString;
         do{
-            myString = inputString("Do you want to continue (Y/N)? _");
+            myString = inputString(notify);
         } while (!myString.equalsIgnoreCase("y") && !myString.equalsIgnoreCase("n"));
         return myString.equalsIgnoreCase("y");
     }

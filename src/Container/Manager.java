@@ -51,29 +51,30 @@ public class Manager {
         return dateOut;
     }
 
-    public void ChoiceReadFile(String fileName) {
+    public void ChoiceReadFile() {
+        do {                           
         try {
-
-            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            String fileName = InputValid.inputString("Enter file Name:");
+            BufferedReader br = new BufferedReader(new FileReader(fileName));            
             String detail;
-            while ((detail = br.readLine()) != null) {
-                String arr[] = detail.split("[,]");
+            while ((detail = br.readLine()) != null) {                
+                String arr[] = detail.split("[,]");                
                 String code = arr[0].trim();
                 String name = arr[1].trim();
                 String owner = arr[2].trim();
                 String manufacture = arr[3].trim();
                 Date DateIn = InputValid.StringToDate(arr[4].trim());
                 Date DateOut = InputValid.StringToDate(arr[5].trim());
-
                 if (!data.isExistCarCode(code)) {
                     data.add(new Car(code, name, owner, manufacture, DateIn, DateOut));
                 }
-            }
+            }            
             br.close();
-
+            break;
         } catch (Exception ex) {
-            System.out.println("Error: " + ex);
+            System.out.println("Can't read your file.");
         }
+        } while (true);
         Menu.Notification.Success("Read file");
     }
 
@@ -81,7 +82,11 @@ public class Manager {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(fileName), "utf-8"))) {
             for (Car thisCar : data) {
-                writer.write(thisCar.getCode() + "," + thisCar.getName() + "," + thisCar.getOwner() + "," + thisCar.getManufacture() + "," + thisCar.dateToString(thisCar.getDateIn()) + "," + thisCar.dateToString(thisCar.getDateOut()) + " ");
+                writer.write(thisCar.getCode() + "," + thisCar.getName() +
+                        "," + thisCar.getOwner() + "," + thisCar.getManufacture() + 
+                        "," + thisCar.dateToString(thisCar.getDateIn()) + 
+                        "," + thisCar.dateToString(thisCar.getDateOut()) + 
+                        " ");
                 writer.newLine();
             }
             writer.close();
@@ -108,7 +113,7 @@ public class Manager {
     public void ChoiceRemove() {
         String code;
         Menu.Notification.Header("REMOVE CAR");
-        if (data.getSize() == 0) {
+        if (data.isEmpty()) {
             System.out.println("This list is EMPTY can't remove");
             return;
         }
@@ -116,7 +121,7 @@ public class Manager {
             code = InputValid.inputString("Enter Car's Code:");
             if (!data.isExistCarCode(code)) {
                 Menu.Notification.showNotContain(code);
-                if (!InputValid.Confirm()) {
+                if (!InputValid.Confirm("Do you want to continue (Y/N)?")) {
                     return;
                 }
             } else {
@@ -130,7 +135,7 @@ public class Manager {
     public void ChoiceModify() {
         String code;
         Menu.Notification.Header("Modify CAR");
-        if (data.getSize() == 0) {
+        if (data.isEmpty()) {
             System.out.println("This list is EMPTY can't modify");
             return;
         }
@@ -138,7 +143,7 @@ public class Manager {
             code = InputValid.inputString("Enter Car's Code:");
             if (!data.isExistCarCode(code)) {
                 Menu.Notification.showNotContain(code);
-                if (!InputValid.Confirm()) {
+                if (!InputValid.Confirm("Do you want to continue (Y/N)?")) {
                     return;
                 }
             } else {
@@ -173,7 +178,7 @@ public class Manager {
         Menu.Notification.Header("Search CAR");
 
         int choice;
-        if (data.getSize() == 0) {
+        if (data.isEmpty()) {
             System.out.println("This list is EMPTY can't search");
             return;
         }
@@ -189,7 +194,7 @@ public class Manager {
                         code = InputValid.inputString("\t\tEnter CODE: ");
                         if (!data.isExistCarCode(code)) {
                             Menu.Notification.showNotContain(code);
-                            if (!InputValid.Confirm()) {
+                            if (!InputValid.Confirm("Do you want to continue (Y/N)?")) {
                                 return;
                             }
                         } else {
@@ -207,7 +212,7 @@ public class Manager {
                         if (!data.isExistCarName(name)) {
 
                             Menu.Notification.showNotContain("Name: " + name);
-                            if (!InputValid.Confirm()) {
+                            if (!InputValid.Confirm("Do you want to continue (Y/N)?")) {
                                 return;
                             }
                         } else {
@@ -223,7 +228,7 @@ public class Manager {
                         Owner = InputValid.inputString("\t\tEnter Owner: ");
                         if (!data.isExistCarOwner(Owner)) {
                             Menu.Notification.showNotContain("Owner: " + Owner);
-                            if (!InputValid.Confirm()) {
+                            if (!InputValid.Confirm("Do you want to continue (Y/N)?")) {
                                 return;
                             }
                         } else {
@@ -239,7 +244,7 @@ public class Manager {
                         MANUFACTURE = InputValid.inputString("\t\tEnter MANUFACTURE: ");
                         if (!data.isExistCarManufacture(MANUFACTURE)) {
                             Menu.Notification.showNotContain("MANUFACTURE: " + MANUFACTURE);
-                            if (!InputValid.Confirm()) {
+                            if (!InputValid.Confirm("Do you want to continue (Y/N)?")) {
                                 return;
                             }
                         } else {
@@ -254,7 +259,7 @@ public class Manager {
                         dateIn = InputValid.inputDate("\t\tEnter dateIn: ");
                         if (!data.isExistCarDateIn(dateIn)) {
                             Menu.Notification.showNotContain("dateIn: " + dateIn);
-                            if (!InputValid.Confirm()) {
+                            if (!InputValid.Confirm("Do you want to continue (Y/N)?")) {
                                 return;
                             }
                         } else {
@@ -270,7 +275,7 @@ public class Manager {
                         dateOut = InputValid.inputDate("\t\tEnter dateOut: ");
                         if (!data.isExistCarDateOut(dateOut)) {
                             Menu.Notification.showNotContain("dateOut: " + dateOut);
-                            if (!InputValid.Confirm()) {
+                            if (!InputValid.Confirm("Do you want to continue (Y/N)?")) {
                                 return;
                             }
                         } else {
@@ -289,7 +294,7 @@ public class Manager {
     public void ChoiceSort() {
         Menu.Notification.Header("Sort CAR");
         int choice;
-        if (data.getSize() == 0) {
+        if (data.isEmpty()) {
             System.out.println("This list is EMPTY can't sort");
             return;
         }

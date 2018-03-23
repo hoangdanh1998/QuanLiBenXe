@@ -5,6 +5,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+      
         Manager manager = new Manager();
         Menu menu = new Menu();
         menu.add("1 - Add a car.");
@@ -16,46 +17,50 @@ public class Main {
         menu.add("7 - Read file store data.");
         menu.add("8 - Save data to file.");
         menu.add("9 - EXIT!");
-        int choice;
+        int choice; boolean isChanged = false;
         do {
             menu.print();
             do {
-                choice = InputValid.inputInteger("Enter your choice: ");
+                choice = InputValid.inputInteger("Enter your choice: ");                
             } while (choice < 0 || choice > menu.size());
             switch (choice) {
                 case 1:
-                    manager.ChoiceAdd();
+                    manager.ChoiceAdd();     
+                    isChanged = true;
                     break;
                 case 2:
                     manager.ChoiceRemove();
+                    isChanged = true;
                     break;
                 case 3:
                     manager.ChoiceModify();
+                    isChanged = true;
                     break;
                 case 4:
                     manager.ChoiceSearchCar();
+                    isChanged = true;
                     break;
                 case 5:
-                    manager.ChoiceSort();
+                    manager.ChoiceSort();                    
                     break;
                 case 6:
                     manager.display();
                     break;
                 case 7:
-                    manager.ChoiceReadFile("DATA.sak");
+                    manager.ChoiceReadFile(); 
                     break;
-                case 8:
+                case 8:                    
                     manager.ChoiceWriteFile("DATA.sak");
+                    isChanged = false;
                     break;
                 case 9:
-                    do {
-                        if (!InputValid.Confirm()) {
-                            System.out.println("Thank for your using");
-                            System.exit(0);
-                        } else {
-                            break;
-                        }
-                    } while (true);
+                    if (isChanged){
+                    if (!InputValid.Confirm("Save change to file (Y/N)?")){
+                        System.out.println("Thank you");
+                        System.exit(0);
+                    } else manager.ChoiceWriteFile("DATA.sak");
+                    } else System.out.println("Thank you.");
+                    System.exit(0);
             }
         } while (true);
 
