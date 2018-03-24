@@ -2,6 +2,8 @@
 package Container;
 
 import Model.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.*;
 
 public class CarList extends Vector<Car> {
@@ -11,7 +13,48 @@ public class CarList extends Vector<Car> {
     public CarList(int limit) {
         this.limit = limit;
     }
-
+    public Vector<Vector<String>> getVectorStringData(){
+        Vector<Vector<String>> myVector = new Vector();
+            
+            for (Car thisCar: this){
+                Vector<String> detail = new Vector();
+                detail.add(thisCar.getCode());
+                detail.add(thisCar.getOwner());
+                detail.add(thisCar.getName());
+                detail.add(thisCar.getManufacture());
+                detail.add(thisCar.dateToString(thisCar.getDateIn()));
+                detail.add(thisCar.dateToString(thisCar.getDateOut()));
+                
+                myVector.add(detail);
+            }
+        return myVector;
+    }
+    public void ChoiceReadFile() {
+        do {                           
+        try {
+            String fileName = "DATA.sak";
+            BufferedReader br = new BufferedReader(new FileReader(fileName));            
+            String detail;
+            while ((detail = br.readLine()) != null) {                
+                String arr[] = detail.split("[,]");                
+                String code = arr[0].trim();
+                String name = arr[1].trim();
+                String owner = arr[2].trim();
+                String manufacture = arr[3].trim();
+                Date DateIn = InputValid.StringToDate(arr[4].trim());
+                Date DateOut = InputValid.StringToDate(arr[5].trim());
+                if (!this.isExistCarCode(code)) {
+                    this.add(new Car(code, name, owner, manufacture, DateIn, DateOut));
+                }
+            }            
+            br.close();
+            break;
+        } catch (Exception ex) {
+            System.out.println("Can't read your file.");
+        }
+        } while (true);
+        Menu.Notification.Success("Read file");
+    }
     void addCar(Car newCar) {
         this.add(newCar);
     }
