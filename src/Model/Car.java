@@ -124,7 +124,7 @@ public class Car implements Comparable {
         }
     };
 
-    public String dateToString(Date myDate) {
+    public static String dateToString(Date myDate) {
         if (myDate == null) {
             return "";
         } else {
