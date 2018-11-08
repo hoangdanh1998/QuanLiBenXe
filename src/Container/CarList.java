@@ -12,9 +12,10 @@ import java.util.*;
 public class CarList extends Vector<Car> {
 
     private int limit;
-
+    
     public CarList(int limit) {
         this.limit = limit;
+        System.out.println("hello");
     }
 
     public Vector<Vector<String>> getVectorStringData() {
@@ -36,6 +37,7 @@ public class CarList extends Vector<Car> {
 
     public void ChoiceReadFile() {
         do {
+            
             try {
                 String fileName = "DATA.sak";
                 BufferedReader br = new BufferedReader(new FileReader(fileName));
